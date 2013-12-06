@@ -1,3 +1,16 @@
+libqbit-application-model-dbmanager-perl (0.002) raring; urgency=low
+
+  * Remove excess code and fix coding style.
+
+  * Fix the problem of dependent but prohibited fields.
+  * In the case when the field is prohibited for the role, but it is in
+    forced_depends_on list, the field will be removed from the sql query,
+    so another one field which is dependant on the first one will not be
+    able to be computed. The problem described above is resolved in the
+    commit.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Fri, 06 Dec 2013 12:39:13 +0400
+
 libqbit-application-model-dbmanager-perl (0.001) raring; urgency=low
 
   * Initial commit
