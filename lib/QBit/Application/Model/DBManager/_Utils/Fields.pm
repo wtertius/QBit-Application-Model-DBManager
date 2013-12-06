@@ -35,12 +35,14 @@ sub new {
               @{$fields->{$field}{'depends_on'}};
 
         $res_fields{$field} = clone($fields->{$field});
+    }
 
+    foreach my $field (keys %res_fields) {
         if (exists($fields->{$field}{'depends_on'}) || exists($fields->{$field}{'forced_depends_on'})) {
             foreach
               my $dep_field (@{$fields->{$field}{'depends_on'} || []}, @{$fields->{$field}{'forced_depends_on'} || []})
             {
-                unless (exists($opt_fields{$dep_field})) {
+                unless (exists($res_fields{$dep_field})) {
                     $res_fields{$dep_field} = clone($fields->{$dep_field});
                     $res_fields{$dep_field}->{'need_delete'} = TRUE;
                 }
