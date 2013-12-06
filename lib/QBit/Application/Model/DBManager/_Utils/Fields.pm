@@ -17,8 +17,6 @@ sub new {
     $opt = [grep {$fields->{$_}{'default'}} keys(%$fields)] unless defined($opt);
     $opt = [$opt] if ref($opt) ne 'ARRAY';
 
-    my %opt_fields = map {$_ => 1} @$opt;
-
     foreach (values(%$fields)) {
         $_->{'check_rights'} = [$_->{'check_rights'}]
           if defined($_->{'check_rights'}) && ref($_->{'check_rights'}) ne 'ARRAY';
@@ -35,12 +33,14 @@ sub new {
               @{$fields->{$field}{'depends_on'}};
 
         $res_fields{$field} = clone($fields->{$field});
+    }
 
+    foreach my $field (keys(%res_fields)) {
         if (exists($fields->{$field}{'depends_on'}) || exists($fields->{$field}{'forced_depends_on'})) {
             foreach
               my $dep_field (@{$fields->{$field}{'depends_on'} || []}, @{$fields->{$field}{'forced_depends_on'} || []})
             {
-                unless (exists($opt_fields{$dep_field})) {
+                unless (exists($res_fields{$dep_field})) {
                     $res_fields{$dep_field} = clone($fields->{$dep_field});
                     $res_fields{$dep_field}->{'need_delete'} = TRUE;
                 }
