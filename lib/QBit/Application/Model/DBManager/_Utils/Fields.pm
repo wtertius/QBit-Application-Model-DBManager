@@ -114,7 +114,7 @@ sub need {
 sub _init_field_deps {
     my ($fields, $name) = @_;
 
-    die gettext('Field "%s" does not exists', $name) unless exists($fields->{$name});
+    throw gettext('Field "%s" does not exists', $name) unless exists($fields->{$name});
     my $deps = $fields->{$name}->{'depends_on'};
 
     return unless $deps;
