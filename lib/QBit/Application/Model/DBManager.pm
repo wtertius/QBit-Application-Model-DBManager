@@ -57,7 +57,7 @@ sub get_db_filter_fields {
         my $filter_class = 'QBit::Application::Model::DBManager::Filter::' . $fdata->{'type'};    #delete(
         my $filter_fn    = "$filter_class.pm";
         $filter_fn =~ s/::/\//g;
-        require $filter_fn or die $!;
+        require $filter_fn or throw $!;
 
         $self->{'__DB_FILTER__'}{$fname} = $filter_class->new(%$fdata, field_name => $fname, db_manager => $self);
     }
