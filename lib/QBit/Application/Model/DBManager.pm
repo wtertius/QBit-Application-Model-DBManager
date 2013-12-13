@@ -128,13 +128,6 @@ sub get_all {
 
     $query->distinct if $opts{'distinct'};
 
-    if ($opts{'group_by'}) {
-        my %db_fields = map {$_ => TRUE} keys(%{$fields->get_db_fields()});
-
-        my @group_by = grep {exists($db_fields{ref($_) ? $_->[0] : $_})} @{$opts{'group_by'}};
-        $query->group_by(@group_by);
-    }
-
     if ($opts{'order_by'}) {
         my %db_fields = map {$_ => TRUE} keys(%{$fields->get_db_fields()});
 
