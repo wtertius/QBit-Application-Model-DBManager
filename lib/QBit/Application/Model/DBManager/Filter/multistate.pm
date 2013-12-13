@@ -14,8 +14,7 @@ sub pre_process {
 
     $field->{'values'} = {
         map {$_->[0] => ref($_->[1]) eq 'CODE' ? $_->[1]() : $_->[1]}
-          grep {!$_->[2]{'private'}}['__EMPTY__' => $self->{'db_manager'}->get_empty_name()],
-        @{$self->{'db_manager'}->get_multistates_bits()}
+        grep {!$_->[2]{'private'}} @{$self->{'db_manager'}->get_multistates_bits()}
     };
 }
 
@@ -46,12 +45,12 @@ sub expressions {
     my $ns = lc(join('___', @{$opts{'ns'} || []}));
 
     return [
-        $uc_field_name
+        $uc_field_name 
           . " '='  "
           . ($ns ? "${ns}___" : '')
           . "${field_name}___multistate"
           . " { [$_[1] => '='  => \$_[3]] }",
-        $uc_field_name
+        $uc_field_name 
           . " '<>' "
           . ($ns ? "${ns}___" : '')
           . "${field_name}___multistate"
