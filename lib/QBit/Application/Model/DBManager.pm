@@ -51,20 +51,29 @@ sub get_db_filter_fields {
 
     my $filter_fields = package_stash(ref($self))->{'__DB_FILTER__'};
 
-    while (my ($fname, $fdata) = each(%$filter_fields)) {
-        throw Exception::BadArguments gettext('Missed filter type (package: "%s", filter: "%s")', ref($self), $fname)
+    if (exists($opts{fields})) {
+        foreach my $field (@{$opts{fields}}) {
+            throw Exception::BadArguments gettext('Unknown field "%s"', $field) unless exists($filter_fields->{$field});
+        }
+    }
+    my @fields = exists($opts{fields}) ? (@{$opts{fields}}) : (keys %$filter_fields);
+
+    foreach my $field (@fields) {
+        my $fdata = $filter_fields->{$field};
+
+        throw Exception::BadArguments gettext('Missed filter type (package: "%s", filter: "%s")', ref($self), $field)
           unless defined($fdata->{'type'});
         my $filter_class = 'QBit::Application::Model::DBManager::Filter::' . $fdata->{'type'};    #delete(
         my $filter_fn    = "$filter_class.pm";
         $filter_fn =~ s/::/\//g;
         require $filter_fn or throw $!;
 
-        $self->{'__DB_FILTER__'}{$fname} = $filter_class->new(%$fdata, field_name => $fname, db_manager => $self);
+        $self->{'__DB_FILTER__'}{$field} = $filter_class->new(%$fdata, field_name => $field, db_manager => $self);
     }
 
     my %fields = %{clone(package_stash(ref($self))->{'__DB_FILTER__'}) || {}};
 
-    foreach my $field (keys(%fields)) {
+    foreach my $field (@fields) {
         my $save = TRUE;
 
         $save = $self->{'__DB_FILTER__'}{$field}->pre_process($fields{$field}, $field, %opts)
@@ -118,6 +127,13 @@ sub get_all {
     )->all_langs($opts{'all_locales'});
 
     $query->distinct if $opts{'distinct'};
+
+    if ($opts{'group_by'}) {
+        my %db_fields = map {$_ => TRUE} keys(%{$fields->get_db_fields()});
+
+        my @group_by = grep {exists($db_fields{ref($_) ? $_->[0] : $_})} @{$opts{'group_by'}};
+        $query->group_by(@group_by);
+    }
 
     if ($opts{'order_by'}) {
         my %db_fields = map {$_ => TRUE} keys(%{$fields->get_db_fields()});
@@ -212,8 +228,6 @@ sub _get_db_filter_from_data {
     return $self->_get_db_filter_from_data([AND => [map {[$_ => '=' => $data->{$_}]} keys(%$data)]], %opts)
       if ref($data) eq 'HASH';
 
-    my $model_fields = $opts{'model_fields'} ||= $self->get_db_filter_fields(private => TRUE);
-
     if (ref($data) eq 'ARRAY' && @$data == 2 && ref($data->[1]) eq 'ARRAY') {
         throw Exception::BadArguments gettext('Unknow operation "%s"', uc($data->[0]))
           unless in_array(uc($data->[0]), [qw(OR AND)]);
@@ -223,18 +237,22 @@ sub _get_db_filter_from_data {
           : $self->_db()
           ->filter([uc($data->[0]) => [map {$self->_get_db_filter_from_data($_, %opts)->expression()} @{$data->[1]}]]);
     } elsif (ref($data) eq 'ARRAY' && @$data == 3) {
-        throw Exception::BadArguments gettext('Unknown field "%s"', $data->[0])
-          unless exists($model_fields->{$data->[0]});
+        my $field = $data->[0];
+        $opts{'model_fields'}{$field} ||= $self->get_db_filter_fields(private => TRUE, fields => [$field])->{$field};
+        my $model_fields = $opts{'model_fields'};
 
-        $self->{'__DB_FILTER__'}{$data->[0]}->check($data, $model_fields->{$data->[0]})
-          if $self->{'__DB_FILTER__'}{$data->[0]}->can('check');
+        throw Exception::BadArguments gettext('Unknown field "%s"', $field)
+          unless defined($model_fields->{$field});
+
+        $self->{'__DB_FILTER__'}{$field}->check($data, $model_fields->{$field})
+          if $self->{'__DB_FILTER__'}{$field}->can('check');
 
         return ($opts{'type'} || '') eq 'text'
-          ? $self->{'__DB_FILTER__'}{$data->[0]}->as_text($data, $model_fields->{$data->[0]}, %opts)
+          ? $self->{'__DB_FILTER__'}{$field}->as_text($data, $model_fields->{$field}, %opts)
           : return $self->_db()->filter(
-              $model_fields->{$data->[0]}{'db_filter'}
-            ? $model_fields->{$data->[0]}{'db_filter'}($self, $data, $model_fields->{$data->[0]}, %opts)
-            : $self->{'__DB_FILTER__'}{$data->[0]}->as_filter($data, $model_fields->{$data->[0]}, %opts)
+              $model_fields->{$field}{'db_filter'}
+            ? $model_fields->{$field}{'db_filter'}($self, $data, $model_fields->{$field}, %opts)
+            : $self->{'__DB_FILTER__'}{$field}->as_filter($data, $model_fields->{$field}, %opts)
           );
 
     } else {
