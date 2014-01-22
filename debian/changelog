@@ -1,3 +1,21 @@
+libqbit-application-model-dbmanager-perl (0.003) raring; urgency=low
+
+  * Remove group_by.
+
+  * Fix perltidy errors.
+
+  * Revert wrong change.
+
+  * Add group_by to models and do not load the all fields without need.
+
+  * Replace 'die' by 'throw'.
+
+  * Remove excess spaces added by perltidy.
+
+  * Add __EMPTY__ multistate to filter.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Fri, 13 Dec 2013 19:45:24 +0400
+
 libqbit-application-model-dbmanager-perl (0.002) raring; urgency=low
 
   * Remove excess code and fix coding style.
