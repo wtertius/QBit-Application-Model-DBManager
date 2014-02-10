@@ -1,3 +1,9 @@
+libqbit-application-model-dbmanager-perl (0.005) raring; urgency=low
+
+  * Add 'for_update' option to 'get_all' method.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Mon, 10 Feb 2014 13:38:30 +0400
+
 libqbit-application-model-dbmanager-perl (0.004) raring; urgency=low
 
   * Fix db_filter_fields opts recurcion bug with fields param.
