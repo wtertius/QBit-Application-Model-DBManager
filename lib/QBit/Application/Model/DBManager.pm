@@ -126,7 +126,8 @@ sub get_all {
         filter => $self->get_db_filter($opts{'filter'}),
     )->all_langs($opts{'all_locales'});
 
-    $query->distinct if $opts{'distinct'};
+    $query->distinct   if $opts{'distinct'};
+    $query->for_update if $opts{'for_update'};
 
     if ($opts{'order_by'}) {
         my %db_fields = map {$_ => TRUE} keys(%{$fields->get_db_fields()});
