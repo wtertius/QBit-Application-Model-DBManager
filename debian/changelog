@@ -1,3 +1,9 @@
+libqbit-application-model-dbmanager-perl (0.006) raring; urgency=low
+
+  * Set last fields at the end of 'get_all'.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Thu, 13 Feb 2014 17:54:36 +0400
+
 libqbit-application-model-dbmanager-perl (0.005) raring; urgency=low
 
   * Add 'for_update' option to 'get_all' method.
