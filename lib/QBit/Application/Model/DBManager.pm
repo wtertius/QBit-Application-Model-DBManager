@@ -116,9 +116,9 @@ sub get_all {
 
     my $fields = $self->_get_fields_obj($opts{'fields'});
 
-    $self->{'__LAST_FIELDS__'} = $fields->get_fields();
-    foreach (keys(%{$self->{'__LAST_FIELDS__'}})) {    # Hide unavailable fields
-        delete($self->{'__LAST_FIELDS__'}{$_}) if $self->{'__LAST_FIELDS__'}{$_}{'need_delete'};
+    my $last_fields = $fields->get_fields();
+    foreach (keys(%$last_fields)) {    # Hide unavailable fields
+        delete($last_fields->{$_}) if $last_fields->{$_}{'need_delete'};
     }
 
     my $query = $self->query(
@@ -155,6 +155,8 @@ sub get_all {
         $result = $fields->process_data($result);
         $self->timelog->finish();
     }
+
+    $self->{'__LAST_FIELDS__'} = $last_fields;
 
     $self->timelog->finish();
 
