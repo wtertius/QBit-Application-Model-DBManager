@@ -1,3 +1,11 @@
+libqbit-application-model-dbmanager-perl (0.008) raring; urgency=low
+
+  * Allow escaped ^ and $ symbols.
+
+  * Add ^$ metasymbols for begin and end of matched string.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Mon, 17 Feb 2014 16:52:06 +0400
+
 libqbit-application-model-dbmanager-perl (0.007) raring; urgency=low
 
   * Escape by '\' SQL metasymbols: '%', '_'.
