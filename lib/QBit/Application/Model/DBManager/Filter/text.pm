@@ -59,6 +59,9 @@ sub as_filter {
 sub __like_str {
     my ($text) = @_;
 
+    $text =~ s/%/\\%/g;
+    $text =~ s/_/\\_/g;
+
     $text =~ s/\*/%/g;
     $text =~ s/\?/_/g;
 
