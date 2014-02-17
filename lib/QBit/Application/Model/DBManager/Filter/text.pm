@@ -65,7 +65,13 @@ sub __like_str {
     $text =~ s/\*/%/g;
     $text =~ s/\?/_/g;
 
-    return "%$text%";
+    $text = '%' . $text unless $text =~ s/^\^//;
+    $text = $text . '%' unless $text =~ s/([^\\])\$$/$1/;
+
+    $text =~ s/^\Q%\^/%^/;
+    $text =~ s/\Q\$%\E$/\$%/;
+
+    return $text;
 }
 
 TRUE;
