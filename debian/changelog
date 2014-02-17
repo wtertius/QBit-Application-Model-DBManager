@@ -1,3 +1,9 @@
+libqbit-application-model-dbmanager-perl (0.007) raring; urgency=low
+
+  * Escape by '\' SQL metasymbols: '%', '_'.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Mon, 17 Feb 2014 14:56:19 +0400
+
 libqbit-application-model-dbmanager-perl (0.006) raring; urgency=low
 
   * Set last fields at the end of 'get_all'.
