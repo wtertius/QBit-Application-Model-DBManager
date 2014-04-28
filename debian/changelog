@@ -1,3 +1,9 @@
+libqbit-application-model-dbmanager-perl (0.009) raring; urgency=low
+
+  * Mark subfilter as preprocessed just for recursion descendants.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Mon, 28 Apr 2014 11:24:42 +0400
+
 libqbit-application-model-dbmanager-perl (0.008) raring; urgency=low
 
   * Allow escaped ^ and $ symbols.
