@@ -14,8 +14,8 @@ sub pre_process {
     my $accessor_name = $field->{'model_accessor'};
 
     $opts{'subfilters'} ||= {};
-    return FALSE if exists($opts{'subfilters'}->{$self->{'db_manager'}->$accessor_name});
-    $opts{'subfilters'}->{$self->{'db_manager'}} = TRUE;
+    return FALSE if $opts{'subfilters'}->{$self->{'db_manager'}->$accessor_name};
+    local ($opts{'subfilters'}->{$self->{'db_manager'}}) = TRUE;
 
     $opts{'ns'}           ||= [];
     $opts{'nonterminals'} ||= {};
