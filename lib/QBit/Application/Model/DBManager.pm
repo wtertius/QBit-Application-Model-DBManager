@@ -178,7 +178,7 @@ sub last_fields {
 sub get_all_with_meta {
     my ($self, %opts) = @_;
 
-    my %meta_opts = %{delete($opts{'meta'}) // {}};
+    my %meta_opts = map {$_ => TRUE} @{delete($opts{'meta'}) || []};
     $opts{'calc_rows'} = TRUE if $meta_opts{'found_rows'};
 
     my $result = $self->get_all(%opts);
