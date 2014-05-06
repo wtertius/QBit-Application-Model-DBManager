@@ -169,6 +169,30 @@ sub found_rows {
     return $self->{'__FOUND_ROWS__'};
 }
 
+sub last_fields {
+    my ($self) = @_;
+
+    return $self->{'__LAST_FIELDS__'};
+}
+
+sub get_all_with_meta {
+    my ($self, %opts) = @_;
+
+    my %meta_opts = %{delete($opts{'meta'}) // {}};
+    $opts{'calc_rows'} = TRUE if $meta_opts{'found_rows'};
+
+    my $result = $self->get_all(%opts);
+
+    my %meta;
+    $meta{'last_fields'} = [keys($self->last_fields())] if $meta_opts{'last_fields'};
+    $meta{'found_rows'}  = $self->found_rows()          if $meta_opts{'found_rows'};
+
+    return {
+        result => $result,
+        meta   => \%meta,
+    };
+}
+
 sub get {
     my ($self, $pk, %opts) = @_;
 
