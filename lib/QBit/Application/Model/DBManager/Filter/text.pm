@@ -42,10 +42,12 @@ sub as_text {
     my $string;
     if (ref($_[1]->[2]) eq 'ARRAY') {
         $string = '[' . join(', ', map {s/'/\\'/g; "'$_'"} @{$_[1]->[2]}) . ']';
-    } else {
+    } elsif (defined($_[1]->[2])) {
         $string = $_[1]->[2];
         $string =~ s/'/\\'/g;
         $string = "'$string'";
+    } else {
+        $string = 'NULL';
     }
     "$_[1]->[0] $_[1]->[1] $string";
 }

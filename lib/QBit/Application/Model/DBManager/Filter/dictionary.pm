@@ -93,15 +93,15 @@ sub nonterminals {
 
 sub check {
     throw gettext('Bad operation "%s"', $_[1]->[1])
-      unless in_array($_[1]->[1], ['=', '<>']);
+      unless in_array($_[1]->[1], [qw(= <> IS), 'IS NOT']);
 }
 
 sub as_text {
     "$_[1]->[0] $_[1]->[1] "
       . (
-        ref($_[1]->[2]) eq 'ARRAY'
-        ? '[' . join(', ', map {$_[2]->{'id2key'}{$_}} @{$_[1]->[2]}) . ']'
-        : $_[2]->{'id2key'}{$_[1]->[2]}
+          ref($_[1]->[2]) eq 'ARRAY' ? '[' . join(', ', map {$_[2]->{'id2key'}{$_}} @{$_[1]->[2]}) . ']'
+        : defined($_[1]->[2]) ? $_[2]->{'id2key'}{$_[1]->[2]}
+        : 'NULL'
       );
 }
 
