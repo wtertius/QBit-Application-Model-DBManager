@@ -1,7 +1,9 @@
 #!/usr/bin/perl
 
 use qbit;
-use lib 't/lib';
+use FindBin qw($Bin);
+use lib "t/lib";
+use lib "$Bin/../lib";
 use Test::More tests => 109;
 
 use TestAppDBManager;
