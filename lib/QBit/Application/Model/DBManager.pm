@@ -245,7 +245,8 @@ sub _get_db_filter_from_data {
 
     return [AND => [undef]] if ref($data) && ref($data) eq 'ARRAY' && @$data == 1 && !defined($data->[0]);
 
-    return $self->_get_db_filter_from_data([AND => [map {[$_ => '=' => $data->{$_}]} keys(%$data)]], %opts)
+    return $self->_get_db_filter_from_data(
+        [AND => [map {[$_ => (defined($data->{$_}) ? '=' : 'IS') => $data->{$_}]} keys(%$data)]], %opts)
       if ref($data) eq 'HASH';
 
     if (ref($data) eq 'ARRAY' && @$data == 2 && ref($data->[1]) eq 'ARRAY') {

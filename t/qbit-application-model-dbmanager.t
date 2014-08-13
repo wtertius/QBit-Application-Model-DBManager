@@ -4,7 +4,7 @@ use qbit;
 use FindBin qw($Bin);
 use lib "t/lib";
 use lib "$Bin/../lib";
-use Test::More tests => 109;
+use Test::More tests => 134;
 
 use TestAppDBManager;
 
@@ -120,6 +120,21 @@ foreach my $op (qw(= <> > < >= <=)) {
     );
 }
 
+foreach my $op ('IS', 'IS NOT') {
+    is_deeply(
+        $app->bookshelf->get_db_filter("id $op NULL"),
+        $app->db->filter([id => $op => \undef]),
+        "Check text filter: number $op"
+    );
+    is_deeply($app->bookshelf->get_db_filter("id $op NULL", type => 'text'),
+        "id $op NULL", "Check text filter: number $op (as text)");
+    is_deeply(
+        $app->info_book->get_db_filter("book_id $op NULL"),
+        $app->db->filter([{id => 'book'} => $op => \undef]),
+        "Check text filter(field from join table): number $op"
+    );
+}
+
 foreach my $op (qw(= <> IN), 'NOT IN') {
     is_deeply(
         $app->bookshelf->get_db_filter("id $op [1, 2, 3]"),
@@ -153,6 +168,24 @@ foreach my $op ('=', '<>') {
     is_deeply(
         $app->info_book->get_db_filter("book_title $op 'example'"),
         $app->db->filter([{title => 'book'} => $op => \'example']),
+        "Check text filter(field from join table): text $op"
+    );
+}
+
+foreach my $op ('IS', 'IS NOT') {
+    is_deeply(
+        $app->bookshelf->get_db_filter("title $op NULL"),
+        $app->db->filter([title => $op => \undef]),
+        "Check text filter: text $op"
+    );
+    is_deeply(
+        $app->bookshelf->get_db_filter("title $op NULL", type => 'text'),
+        "title $op NULL",
+        "Check text filter: text $op (as text)"
+    );
+    is_deeply(
+        $app->info_book->get_db_filter("book_title $op NULL"),
+        $app->db->filter([{title => 'book'} => $op => \undef]),
         "Check text filter(field from join table): text $op"
     );
 }
@@ -258,6 +291,26 @@ foreach my $op ('=', '<>') {
     );
 }
 
+foreach my $op ('IS', 'IS NOT') {
+    is_deeply(
+        $app->book->get_db_filter("genre $op NULL"),
+        $app->db->filter([genre => $op => \undef]),
+        "Check text filter: dictionary $op"
+    );
+
+    is_deeply(
+        $app->book->get_db_filter("genre $op NULL", type => 'text'),
+        "genre $op NULL",
+        "Check text filter: dictionary $op (as text)"
+    );
+
+    is_deeply(
+        $app->info_book->get_db_filter("book_genre $op NULL"),
+        $app->db->filter([{genre => 'book'} => $op => \undef]),
+        "Check text filter(field from join table): dictionary $op"
+    );
+}
+
 # MULTISTATE
 foreach my $op ('=', '<>') {
     is_deeply(
@@ -313,6 +366,12 @@ is_deeply(
     $app->book->get_db_filter({id => 100, title => 'test'}, type => 'text'),
     '(title = \'test\' AND id = 100)',
     'Check hash filter: expression (as text)'
+);
+
+is_deeply(
+    $app->book->get_db_filter({id => undef, title => 'test'}, type => 'text'),
+    '(title = \'test\' AND id IS NULL)',
+    'Check hash filter: expression with undef (as text)'
 );
 
 #======== get_all ========
@@ -393,6 +452,14 @@ foreach my $op (qw(= <> > < >= <=)) {
     );
 }
 
+foreach my $op ('IS', 'IS NOT') {
+    is_deeply(
+        $app->info_book->get_db_filter("book_id $op NULL"),
+        $app->db->filter([{id => 'book'} => $op => \undef]),
+        "Check text filter(field from join table): number $op"
+    );
+}
+
 foreach my $op (qw(= <> IN), 'NOT IN') {
     is_deeply(
         $app->info_book->get_db_filter("book_id $op [1, 2, 3]"),
@@ -406,6 +473,14 @@ foreach my $op ('=', '<>') {
     is_deeply(
         $app->info_book->get_db_filter("book_title $op 'example'"),
         $app->db->filter([{title => 'book'} => $op => \'example']),
+        "Check text filter(field from join table): text $op"
+    );
+}
+
+foreach my $op ('IS', 'IS NOT') {
+    is_deeply(
+        $app->info_book->get_db_filter("book_title $op NULL"),
+        $app->db->filter([{title => 'book'} => $op => \undef]),
         "Check text filter(field from join table): text $op"
     );
 }
@@ -443,5 +518,13 @@ foreach my $op ('=', '<>') {
         $app->info_book->get_db_filter("book_genre $op [novel, comics]"),
         $app->db->filter([{genre => 'book'} => $op => \[0, 2]]),
         "Check text filter(field from join table): dictionary $op array"
+    );
+}
+
+foreach my $op ('IS', 'IS NOT') {
+    is_deeply(
+        $app->info_book->get_db_filter("book_genre $op NULL"),
+        $app->db->filter([{genre => 'book'} => $op => \undef]),
+        "Check text filter(field from join table): dictionary $op"
     );
 }

@@ -12,7 +12,6 @@ my %TOKENS = (
     OR     => {re => '/\G(OR)/igc and return (OR => $1)',       priority => 2},
     IS     => {re => '/\G(IS)/igc and return (IS => $1)',       priority => 2},
     IN     => {re => '/\G(IN)/igc and return (IN => $1)',       priority => 2},
-    NOT    => {re => '/\G(NOT)/igc and return (NOT => $1)',     priority => 3},
     LIKE   => {re => '/\G(LIKE)/igc and return (LIKE => $1)',   priority => 4},
     NOT    => {re => '/\G(NOT)/igc and return (NOT => $1)',     priority => 3},
     MATCH  => {re => '/\G(MATCH)/igc and return (MATCH => $1)', priority => 5},
@@ -21,6 +20,7 @@ my %TOKENS = (
         priority => 0
     },
     NUMBER => {re => '/\G(\d+(?:\.\d*)?)/igc and return (NUMBER => $1)', priority => 0},
+    NULL   => {re => '/\G(NULL)/igc and return (NULL => undef)',         priority => 4},
 );
 
 sub init {

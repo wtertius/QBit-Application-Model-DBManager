@@ -4,7 +4,7 @@ use qbit;
 
 use base qw(QBit::Application::Model::DBManager::Filter);
 
-sub need_tokens {return [qw(NUMBER NOT IN IS)]}
+sub need_tokens {return [qw(NUMBER NOT IN IS NULL)]}
 
 sub nonterminals {
     return {
@@ -25,8 +25,8 @@ sub expressions {
         "$uc_field_name '>='   NUMBER      { [$field_name => '>='     => \$_[3]] }",
         "$uc_field_name '<'    NUMBER      { [$field_name => '<'      => \$_[3]] }",
         "$uc_field_name '<='   NUMBER      { [$field_name => '<='     => \$_[3]] }",
-        "$uc_field_name 'IS'     NUMBER      { [$field_name => 'IS'       => \$_[3]] }",
-        "$uc_field_name 'IS NOT' NUMBER      { [$field_name => 'IS NOT'   => \$_[3]] }",
+        "$uc_field_name 'IS'     NULL      { [$field_name => 'IS'       => \$_[3]] }",
+        "$uc_field_name 'IS NOT' NULL      { [$field_name => 'IS NOT'   => \$_[3]] }",
         "$uc_field_name '='    number_list { [$field_name => '='      => \$_[3]] }",
         "$uc_field_name '<>'   number_list { [$field_name => '<>'     => \$_[3]] }",
         "$uc_field_name IN     number_list { [$field_name => 'IN'     => \$_[3]] }",
