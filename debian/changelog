@@ -1,3 +1,15 @@
+libqbit-application-model-dbmanager-perl (0.011) raring; urgency=low
+
+  * Don't call database on undefined primary key in get method.
+
+  * Add test for is filters.
+
+  * Implement is null expressions for number and dictionary.
+
+  * Implement IS NULL and IS NOT NULL filter for text type.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Fri, 17 Oct 2014 16:05:47 +0400
+
 libqbit-application-model-dbmanager-perl (0.010) raring; urgency=low
 
   * Rename 'result' to 'data'.
