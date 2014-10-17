@@ -196,6 +196,8 @@ sub get_all_with_meta {
 sub get {
     my ($self, $pk, %opts) = @_;
 
+    return undef unless defined($pk);
+
     my $pk_fields = $self->get_pk_fields();
 
     $pk = {$pk_fields->[0] => $pk} if ref($pk) ne 'HASH';
