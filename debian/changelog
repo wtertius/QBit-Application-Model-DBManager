@@ -1,3 +1,9 @@
+libqbit-application-model-dbmanager-perl (0.013) raring; urgency=low
+
+  * Define token IS and remote excess quotes.
+
+ -- Ivan Bessarabov <ivan@bessarabov.ru>  Wed, 22 Oct 2014 19:33:58 +0400
+
 libqbit-application-model-dbmanager-perl (0.012) raring; urgency=low
 
   * Add dependancy on Test::Deep.
