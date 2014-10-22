@@ -11,6 +11,7 @@ my %TOKENS = (
     AND    => {re => '/\G(AND)/igc and return (AND => $1)',     priority => 3},
     OR     => {re => '/\G(OR)/igc and return (OR => $1)',       priority => 2},
     IN     => {re => '/\G(IN)/igc and return (IN => $1)',       priority => 2},
+    IS     => {re => '/\G(IS)/igc and return (IS => $1)',       priority => 2},
     NOT    => {re => '/\G(NOT)/igc and return (NOT => $1)',     priority => 3},
     LIKE   => {re => '/\G(LIKE)/igc and return (LIKE => $1)',   priority => 4},
     NOT    => {re => '/\G(NOT)/igc and return (NOT => $1)',     priority => 3},

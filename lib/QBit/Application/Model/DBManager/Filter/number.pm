@@ -25,7 +25,7 @@ sub expressions {
         "$uc_field_name '>='   NUMBER      { [$field_name => '>='     => \$_[3]] }",
         "$uc_field_name '<'    NUMBER      { [$field_name => '<'      => \$_[3]] }",
         "$uc_field_name '<='   NUMBER      { [$field_name => '<='     => \$_[3]] }",
-        "$uc_field_name 'IS'     NUMBER      { [$field_name => 'IS'       => \$_[3]] }",
+        "$uc_field_name IS     NUMBER      { [$field_name => IS       => \$_[3]] }",
         "$uc_field_name 'IS NOT' NUMBER      { [$field_name => 'IS NOT'   => \$_[3]] }",
         "$uc_field_name '='    number_list { [$field_name => '='      => \$_[3]] }",
         "$uc_field_name '<>'   number_list { [$field_name => '<>'     => \$_[3]] }",
