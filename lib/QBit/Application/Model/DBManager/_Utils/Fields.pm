@@ -115,13 +115,27 @@ sub _init_field_deps {
     my ($fields, $name) = @_;
 
     throw gettext('Field "%s" does not exists', $name) unless exists($fields->{$name});
-    my $deps = $fields->{$name}->{'depends_on'};
 
-    return unless $deps;
+    my %deps;
+    foreach (qw(depends_on forced_depends_on)) {
+        $deps{$_} = $fields->{$name}{$_} // [];
+        $deps{$_} = [$deps{$_}] if ref($deps{$_}) ne 'ARRAY';
+    }
 
-    $deps = [$deps] if ref($deps) ne 'ARRAY';
-    $fields->{$name}->{'depends_on'} = array_uniq([@$deps, map({_init_field_deps($fields, $_)} @$deps)]);
-    return @{$fields->{$name}->{depends_on}};
+    if (map {@$_} values(%deps)) {
+        foreach my $dep (map {_init_field_deps($fields, $_)} @{$deps{'depends_on'}}) {
+            push(@{$deps{$_}}, @{$dep->{$_}}) foreach qw(depends_on forced_depends_on);
+        }
+        foreach my $dep (map {_init_field_deps($fields, $_)} @{$deps{'forced_depends_on'}}) {
+            push(@{$deps{forced_depends_on}}, @{$dep->{$_}}) foreach qw(depends_on forced_depends_on);
+        }
+
+        foreach (qw(depends_on forced_depends_on)) {
+            $fields->{$name}{$_} = array_uniq($deps{$_}) if $deps{$_};
+        }
+    }
+
+    return \%deps;
 }
 
 sub _init_field_sort {
