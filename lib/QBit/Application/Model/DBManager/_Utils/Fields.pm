@@ -118,7 +118,7 @@ sub _init_field_deps {
 
     my %deps;
     foreach (qw(depends_on forced_depends_on)) {
-        $deps{$_} = $fields->{$name}{$_} // [];
+        $deps{$_} = $fields->{$name}{$_} || [];
         $deps{$_} = [$deps{$_}] if ref($deps{$_}) ne 'ARRAY';
     }
 
@@ -127,7 +127,7 @@ sub _init_field_deps {
             push(@{$deps{$_}}, @{$dep->{$_}}) foreach qw(depends_on forced_depends_on);
         }
         foreach my $dep (map {_init_field_deps($fields, $_)} @{$deps{'forced_depends_on'}}) {
-            push(@{$deps{forced_depends_on}}, @{$dep->{$_}}) foreach qw(depends_on forced_depends_on);
+            push(@{$deps{'forced_depends_on'}}, @{$dep->{$_}}) foreach qw(depends_on forced_depends_on);
         }
 
         foreach (qw(depends_on forced_depends_on)) {
