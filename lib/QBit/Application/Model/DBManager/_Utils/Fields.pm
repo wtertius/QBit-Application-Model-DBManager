@@ -118,7 +118,7 @@ sub _init_field_deps {
 
     my %deps;
     foreach (qw(depends_on forced_depends_on)) {
-        $deps{$_} = $fields->{$name}{$_} || [];
+        $deps{$_} = defined($fields->{$name}{$_}) ? $fields->{$name}{$_} : [];
         $deps{$_} = [$deps{$_}] if ref($deps{$_}) ne 'ARRAY';
     }
 
