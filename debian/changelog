@@ -1,3 +1,13 @@
+libqbit-application-model-dbmanager-perl (0.014) raring; urgency=low
+
+  * Use ternary operator instead of || as 0 field name is valid.
+
+  * Use || and quote hash keys.
+
+  * Expand forced fields dependencies.
+
+ -- Sergei Svistunov <sergei-svistunov@yandex.ru>  Mon, 19 Jan 2015 13:30:52 +0400
+
 libqbit-application-model-dbmanager-perl (0.013) raring; urgency=low
 
   * Define token IS and remote excess quotes.
