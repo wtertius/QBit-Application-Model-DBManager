@@ -1,3 +1,9 @@
+libtertiusqbit-application-model-dbmanager-perl (0.015) raring; urgency=low
+
+  * Rename debian package
+
+ -- Dmitry Lukiyanchuk <tertius@yandex-team.ru>  Fri, 17 Apr 2015 17:52:35 +0300
+
 libtertiusqbit-application-model-dbmanager-perl (0.014) raring; urgency=low
 
   * Use ternary operator instead of || as 0 field name is valid.
